@@ -29,10 +29,10 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "react": "18.2.0"
+    "react": "17.0.2"
   },
   "peerDependencies": {
-    "react-native": ">=0.71"
+    "react-native": ">=0.68"
   },
   "devDependencies": {
     "semantic-release": "^22.0.8"
