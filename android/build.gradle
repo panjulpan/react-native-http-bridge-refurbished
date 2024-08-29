@@ -19,7 +19,6 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 33
     buildToolsVersion "33.0.2"
-    namespace "at.alwinschuster.HttpServer"
 
     defaultConfig {
         minSdkVersion 21
