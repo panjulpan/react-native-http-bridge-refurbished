@@ -108,7 +108,53 @@ class BridgeServer {
     httpServer.stop();
   }
 }
+
+class RestBridgeServer extends BridgeServer {
+  listen(port) {
+    if (port < 0 || port > 65535) {
+      throw new Error('Invalid port number');
+    }
+
+    httpServer.start(port, this.serviceName, async rawRequest => {
+      const request = new Request(rawRequest);
+
+      const compareEndpoints = (baseEndpoint, dynamicEndpoint) => {
+        // Normalize the base endpoint: Replace placeholders like {id} with a regex wildcard
+        const normalizedBase = baseEndpoint.replace(/{[^/]+}/g, '([^/]+)');
+
+        // Remove trailing slashes from the dynamic endpoint for consistency
+        const cleanedDynamic = dynamicEndpoint.replace(/\/$/, '');
+
+        // Create a regular expression from the normalized base endpoint
+        const regex = new RegExp(`^${normalizedBase}$`);
+
+        // Test the dynamic endpoint against the regex
+        return regex.test(cleanedDynamic);
+      };
+
+      const callbacks = this.callbacks.filter(
+        c =>
+          (c.method === request.type || c.method === '*') &&
+          (compareEndpoints(c.url, request.url) || c.url === '*'),
+      );
+
+      for (const c of callbacks) {
+        const response = new Response(request.requestId);
+        const result = await c.callback(request, response);
+
+        if (result) {
+          response.json(result);
+        }
+        if (response.closed) {
+          return;
+        }
+      }
+    });
+  }
+}
+
 module.exports = {
+    RestBridgeServer,
     BridgeServer,
     Request,
     Response,
