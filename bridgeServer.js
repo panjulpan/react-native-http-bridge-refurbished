@@ -1,6 +1,7 @@
 'use strict';
 
 import httpServer from "./httpServer";
+import querystring from 'querystring';
 
 class Request {
   constructor(rawRequest) {
@@ -8,9 +9,14 @@ class Request {
     this.postData = rawRequest.postData;
     this.type = rawRequest.type;
     this.url = rawRequest.url;
+    this.queryParameterString = rawRequest.queryParameterString;
   }
   get data() {
     return JSON.parse(this.postData);
+  }
+
+  get queryParameters() {
+    return querystring.parse(this.queryParameterString);
   }
 }
 class Response {

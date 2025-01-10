@@ -7,6 +7,7 @@ declare module "react-native-http-bridge-refurbished" {
             postData?: {};
             type: string;
             url: string;
+            queryParameterString?: string;
         }) => void
     ): void;
 
@@ -24,6 +25,7 @@ declare module "react-native-http-bridge-refurbished" {
         postData?: {};
         type: string;
         url: string;
+        queryParameterString?: string;
     };
 
     export class Request<T> {
@@ -31,6 +33,7 @@ declare module "react-native-http-bridge-refurbished" {
         public readonly postData?: {};
         public readonly type: string;
         public readonly url: string;
+        public readonly queryParameterString?: string;
 
         constructor(rawRequest: RawRequest);
 
